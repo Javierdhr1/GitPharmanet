@@ -13,9 +13,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.ManyToAny;
+
+import com.sun.istack.NotNull;
 
 @Entity
 public class User implements Serializable{
@@ -31,15 +34,25 @@ public class User implements Serializable{
 	private Long id;
 	
 	@Column
+	@NotBlank
 	private String firstName;
+	
 	@Column
+	@NotBlank
 	private String lastName;
+	
 	@Column
+	@NotBlank
 	private String email;
+	
 	@Column
+	@NotBlank
 	private String userName;
+	
 	@Column
+	@NotBlank
 	private String password;
+	
 	@Transient
 	private String confirmPassword;
 	
