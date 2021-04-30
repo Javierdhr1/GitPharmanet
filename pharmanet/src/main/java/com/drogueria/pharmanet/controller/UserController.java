@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.drogueria.pharmanet.dto.ChangePasswordForm;
 import com.drogueria.pharmanet.entity.User;
+import com.drogueria.pharmanet.exception.CustomFieldValidationException;
+import com.drogueria.pharmanet.exception.UserNameOrIdNotExist;
 import com.drogueria.pharmanet.repository.RoleRepository;
 import com.drogueria.pharmanet.repository.UserRepository;
 import com.drogueria.pharmanet.service.UserService;
@@ -59,7 +61,13 @@ public class UserController {
 				userService.createUser(user);
 				model.addAttribute("userForm", new User());
 				model.addAttribute("listTab", "active");
-			} catch (AccountException | AuthenticationException e) {
+			} catch (CustomFieldValidationException e) {
+				result.rejectValue(e.getFieldName(),null,e.getMessage());
+				model.addAttribute("userForm", user);
+				model.addAttribute("formTab", "active");
+				model.addAttribute("userList", userService.getAllUsers());
+				model.addAttribute("roles", roleRepository.findAll());
+			}catch (Exception e) {
 				model.addAttribute("formErrorMessage", e.getMessage());
 				model.addAttribute("userForm", user);
 				model.addAttribute("formTab", "active");
@@ -124,7 +132,7 @@ public class UserController {
 	public String deleteUser(Model model , @PathVariable(name = "id") Long id) {
 		try {
 			userService.deleteUser(id);
-		} catch (Exception e) {
+		} catch (UserNameOrIdNotExist e) {
 			model.addAttribute("listErrorMessage", e.getMessage());
 		}
 		return userForm(model);

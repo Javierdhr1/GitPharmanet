@@ -3,7 +3,7 @@
 <form class="form" role="form" autocomplete="off" th:object="${userForm}" th:action="${editMode} ? @{/editUser} : @{/userForm}" method="post">
 	<!-- Es necesario para poder pasar la validacion del Model -->
 	<input class="form-control" type="hidden" th:field="${userForm.id}" th:if="${editMode}">
-	<input class="form-control" type="hidden" th:field="${userForm.password}" th:if="${editMode}">
+	<input class="form-control" type="hidden" name="password" value="xxxx" th:if="${editMode}">
 
 
 	<div class="form-group row">

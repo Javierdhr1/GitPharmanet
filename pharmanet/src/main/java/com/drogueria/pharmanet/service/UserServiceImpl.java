@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import com.drogueria.pharmanet.dto.ChangePasswordForm;
 import com.drogueria.pharmanet.entity.User;
+import com.drogueria.pharmanet.exception.CustomFieldValidationException;
+import com.drogueria.pharmanet.exception.UserNameOrIdNotExist;
 import com.drogueria.pharmanet.repository.UserRepository;
 
 @Service
@@ -31,28 +33,28 @@ public class UserServiceImpl implements UserService{
 		return userRepository.findAll();
 	}
 	
-	private boolean checkUserNameAvailable(User user) throws AccountException {
+	private boolean checkUserNameAvailable(User user) throws CustomFieldValidationException {
 		Optional<User> userFound = userRepository.findByUserName(user.getUserName());
 		if(userFound.isPresent()) {
-			throw new AccountException("Username no disponible");
+			throw new CustomFieldValidationException("Username no disponible", "userName");
 		}
 		return true;
 	}
 	
-	private boolean checkPasswordValid(User user) throws AuthenticationException {
+	private boolean checkPasswordValid(User user) throws CustomFieldValidationException {
 		
 		if(user.getConfirmPassword() == null || user.getConfirmPassword().isEmpty()) {
-			throw new AuthenticationException("ConfirmPassword no debe estar vacio");
+			throw new CustomFieldValidationException("ConfirmPassword no debe estar vacio","confirmPassword");
 		}
 		
 		if(!user.getPassword().equals(user.getConfirmPassword())){
-			throw new AuthenticationException("Password y ConfirmPassword no son iguales");
+			throw new CustomFieldValidationException("Password y ConfirmPassword no son iguales","password");
 		}
 		return true;
 	}
 
 	@Override
-	public User createUser(User user) throws AccountException, AuthenticationException {
+	public User createUser(User user) throws AuthenticationException, CustomFieldValidationException {
 		if(checkUserNameAvailable(user) && checkPasswordValid(user)) {
 			
 			String encodePass = bCryptPasswordEncoder.encode(user.getPassword());
@@ -63,8 +65,8 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public User getUserById(Long id) throws Exception{
-		return userRepository.findById(id).orElseThrow(() -> new Exception("El usuario no existe"));
+	public User getUserById(Long id) throws UserNameOrIdNotExist{
+		return userRepository.findById(id).orElseThrow(() -> new UserNameOrIdNotExist("El Id del usuario no existe"));
 	}
 
 	@Override
@@ -84,7 +86,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-	public void deleteUser(Long id) throws Exception {
+	public void deleteUser(Long id) throws UserNameOrIdNotExist {
 		User user = getUserById(id);
 		userRepository.delete(user);
 	}
@@ -115,12 +117,15 @@ public class UserServiceImpl implements UserService{
 	
 	private boolean isLoggedUserADMIN() {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
 		UserDetails loggedUser = null;
+		Object roles = null;
+		
 		if (principal instanceof UserDetails) {
 			loggedUser = (UserDetails) principal;
 		
-			loggedUser.getAuthorities().stream()
-					.filter(x -> "ADMIN".equals(x.getAuthority() ))      
+			roles = loggedUser.getAuthorities().stream()
+					.filter(x -> "ROLE_ADMIN".equals(x.getAuthority() ))      
 					.findFirst().orElse(null);
 		}
 		return loggedUser != null ?true :false;
