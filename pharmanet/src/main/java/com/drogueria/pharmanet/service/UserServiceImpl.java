@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.drogueria.pharmanet.dto.ChangePasswordForm;
 import com.drogueria.pharmanet.entity.User;
 import com.drogueria.pharmanet.repository.UserRepository;
 
@@ -75,6 +76,28 @@ public class UserServiceImpl implements UserService{
 	public void deleteUser(Long id) throws Exception {
 		User user = getUserById(id);
 		userRepository.delete(user);
+	}
+
+	@Override
+	public User changePasswordI(ChangePasswordForm form) throws Exception {
+		User user = getUserById(form.getId());
+		
+		if(!user.getPassword().equals(form.getCurrentPassword())) {
+			throw new Exception("Current password invalid");
+		}
+		
+		if(user.getPassword().equals(form.getNewPassword())) {
+			throw new Exception("Current password is equals to actual password");
+		}
+		
+		if(!form.getNewPassword().equals(form.getConfirmPassword())) {
+			throw new Exception("New password and Confirm password not equals");
+		}
+		
+		user.setPassword(form.getNewPassword());
+		
+		return userRepository.save(user);
+		
 	}
 
 }

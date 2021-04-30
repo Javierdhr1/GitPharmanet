@@ -1,20 +1,26 @@
 package com.drogueria.pharmanet.controller;
 
+import java.util.stream.Collectors;
+
 import javax.naming.AuthenticationException;
 import javax.security.auth.login.AccountException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import com.drogueria.pharmanet.dto.ChangePasswordForm;
 import com.drogueria.pharmanet.entity.User;
 import com.drogueria.pharmanet.repository.RoleRepository;
 import com.drogueria.pharmanet.repository.UserRepository;
@@ -76,6 +82,7 @@ public class UserController {
 		model.addAttribute("formTab", "active");
 		
 		model.addAttribute("editMode", true);
+		model.addAttribute("passwordForm", new ChangePasswordForm(id));
 		
 		return "user-form/user-view";
 	}
@@ -86,6 +93,7 @@ public class UserController {
 			model.addAttribute("userForm", user);
 			model.addAttribute("formTab", "active");
 			model.addAttribute("editMode", true);
+			model.addAttribute("passwordForm", new ChangePasswordForm(user.getId()));
 		}else {
 			try {
 				userService.updateUser(user);
@@ -99,6 +107,7 @@ public class UserController {
 				model.addAttribute("userList", userService.getAllUsers());
 				model.addAttribute("roles", roleRepository.findAll());
 				model.addAttribute("editMode", true);
+				model.addAttribute("passwordForm", new ChangePasswordForm(user.getId()));
 			}
 		}
 		model.addAttribute("userList", userService.getAllUsers());
@@ -119,6 +128,24 @@ public class UserController {
 			model.addAttribute("listErrorMessage", e.getMessage());
 		}
 		return userForm(model);
+	}
+	
+	@PostMapping("/editUser/changePassword")
+	public ResponseEntity postEditChangePassword(@Valid @RequestBody ChangePasswordForm form, Errors errors) {
+		try {
+			if(errors.hasErrors()) {
+				String result = errors.getAllErrors()
+						.stream().map(x -> x.getDefaultMessage())
+						.collect(Collectors.joining());
+				
+				throw new Exception(result);
+			}
+			userService.changePasswordI(form);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+		
+		return ResponseEntity.ok("success");
 	}
 	
 }

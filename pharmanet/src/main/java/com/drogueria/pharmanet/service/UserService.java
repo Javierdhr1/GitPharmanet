@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.hibernate.service.spi.ServiceException;
 
+import com.drogueria.pharmanet.dto.ChangePasswordForm;
 import com.drogueria.pharmanet.entity.User;
 
 public interface UserService {
@@ -19,5 +20,7 @@ public interface UserService {
 	public User updateUser(User user) throws Exception;
 	
 	public void deleteUser(Long id) throws Exception;
+	
+	public User changePasswordI(ChangePasswordForm form) throws Exception;
 
 }
