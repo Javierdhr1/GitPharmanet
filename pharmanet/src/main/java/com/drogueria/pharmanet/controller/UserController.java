@@ -35,7 +35,7 @@ public class UserController {
 	@Autowired
 	RoleRepository roleRepository;
 	
-	@GetMapping("/")
+	@GetMapping({"/","/login"})
 	public String index() {
 		return "index";
 	}
@@ -140,7 +140,7 @@ public class UserController {
 				
 				throw new Exception(result);
 			}
-			userService.changePasswordI(form);
+			userService.changePassword(form);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
