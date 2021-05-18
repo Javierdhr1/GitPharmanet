@@ -1,5 +1,5 @@
 body{
-    background: url(../img/background.jpg) no-repeat center center fixed;
+    background: url(../img/background/background4.jpg) no-repeat center center fixed;
     background-size: cover;
 }
 
@@ -23,6 +23,119 @@ label{
 	background-color: #d1d3d6;
 }
 
+.navbar-inverse .nav li a:hover{
+  color: #5bd9d5;
+  background-color: black;
+}
+
 .nav-tabs{
 	border-bottom:0px;
+}
+
+.navbar-brand > img {
+      max-height: 100%;
+      height: 100%;
+      -o-object-fit: contain;
+      object-fit: contain;
+}
+
+.navbar-brand {
+  padding: 0px; /* firefox bug fix */
+}
+
+.container{
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.container-img{
+	width: 100px;
+	height: 100px;
+	margin: 20px;
+	border-radius: 20px;
+	border: 2px solid black;
+	align-content: center;
+	overflow: hidden;
+	position: relative;
+	padding: 0;
+}
+
+.imgindex{
+	width: 100%; 
+	height: 100%;
+}
+
+.container-img:hover img{
+	filter: blur(2px);
+	transform: scale(1.3);
+	transition: all	.3s;
+}
+
+.container-img::before{
+	content: "";
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	transition: all .3s;
+}
+
+.container-img:hover:before{
+	background: rgba(0,0,0,.4);
+	z-index: 2;
+	transition: all .3s;
+}
+
+.texto{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	color: white;
+	z-index: 3;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	flex-direction: column;
+}
+
+.texto a{
+	color: white;
+	font-size: 14px;
+	width: 100%;
+	height:100%;
+	padding-top: 40%;
+	text-decoration-line: none;
+}
+
+.titulo{
+	position: relative;
+	left: 150%;
+}
+
+.container-img:hover .titulo{
+	left: 0;
+	transition: all .3s;
+}
+
+.table thead{
+	background-color: #3498DB;
+	color: white;
+}
+
+.dataTables_info {
+/* 	color: black; */
+}
+
+.dataTables_length {
+/* 	color: black; */
+}
+
+.dataTables_filter {
+	color: black;
 }

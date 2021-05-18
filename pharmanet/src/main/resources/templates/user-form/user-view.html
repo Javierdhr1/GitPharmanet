@@ -1,84 +1,80 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-<title>User Information and Form</title>
-	
-	<!--JQUERY-->
-	<script
- 		src="https://code.jquery.com/jquery-3.3.1.min.js"
- 			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
- 			crossorigin="anonymous"></script>
-	
-	<!-- FRAMEWORK BOOTSTRAP para el estilo de la pagina-->
-	<link rel="stylesheet"
-		href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-	<script
-		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-	<script 
-		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-	
-	<!-- Los iconos tipo Solid de Fontawesome-->
-	<link rel="stylesheet"
-		href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
-	<script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
-	
-	<!-- Nuestro css-->
-	<link rel="stylesheet" type="text/css" href="static/css/user-form.css"
-		th:href="@{/css/user-form.css}">
-
-	<!-- DATA TABLE -->
-	<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-	<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">	
-	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
-
-<script type="text/javascript">
-	$(document).ready(function() {
-		//Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
-		$('#userList').DataTable();
-	});
-</script>
-
+<head th:insert="fragments :: headerfiles">
+    <title>Nuevo Usuario</title>
 </head>
 <body>
+<header th:insert="fragments :: nav"></header>
 	<div class="container">
-		<div class="mx-auto col-sm-8 main-section" id="myTab" role="tablist">
-			<ul class="nav nav-tabs justify-content-end">
-				<li class="nav-item">
-					<a class="nav-link" th:classappend="${listTab}" id="list-tab" data-toggle="tab" href="#list" role="tab" aria-controls="list" aria-selected="false">List</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" th:classappend="${formTab}" id="form-tab" data-toggle="tab" href="#form" role="tab" aria-controls="form" aria-selected="true">Form</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#" th:href="@{/logout}"><span th:text="${#authentication.getPrincipal().getUsername()}"></span> - <span>logout &nbsp</span><span class="float-right"><i class="fas fa-sign-out-alt"></i></span></a>				   	
-				</li>
-			</ul>
-			<div class="tab-content" id="myTabContent">
-				<div class="tab-pane fade show" th:classappend="${listTab}" id="list" role="tabpanel" aria-labelledby="list-tab">
-					<div class="card">
-						<div class="card-header">
-							<h4>Roster</h4>
-						</div>
-						<div class="card-body">
-							<div th:include="user-form/user-list.html" th:remove="tag"></div>
-						</div>
-					</div>
-				</div>
-				<div class="tab-pane fade show" th:classappend="${formTab}" id="form" role="tabpanel" aria-labelledby="form-tab">
-					<div class="card">
-						<div class="card-header">
-							<h4>User Information</h4>
-						</div>
-						<div class="card-body">
-							<div th:include="user-form/user-form.html" th:remove="tag"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+	    <div class="row">
+	        <div class="col-xs-3 col-sm-2 container-img" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/sellForm}">
+	            <img class="imgindex" alt="configuracion.jpg" src="/img/nav/configuracion.jpg" th:href="@{/sellForm}">
+	            <div class="texto" th:href="@{/sellForm}">
+	            	<a class="titulo" th:text="#{navbar.configuration}" th:href="@{/sellForm}"></a>
+	            </div>
+	        </div>
+	        <div class="col-xs-3 col-sm-2 container-img">
+	            <img class="imgindex" title="Caja" alt="caja.jpg" src="/img/nav/caja.jpg">
+	            <div class="texto">
+	            	<h5 class="titulo" th:text="#{navbar.seller.sales}"></h5>
+	            </div>
+	        </div>
+	        <div class="col-xs-3 col-sm-2 container-img">
+	            <img class="imgindex" alt="inventario.png" src="/img/nav/inventario.png">
+	            <div class="texto">
+	            	<h5 class="titulo" th:text="#{navbar.reports.inventory}"></h5>
+	            </div>
+	        </div>
+	        <div class="col-xs-3 col-sm-2 container-img">
+	            <img class="imgindex" alt="devoluciones.jpg" src="/img/nav/devoluciones.jpg">
+	            <div class="texto">
+	            	<h5 class="titulo" th:text="#{navbar.administration.return.sale}"></h5>
+	            </div>
+	        </div>
+	        <div class="col-xs-3 col-sm-2 container-img">
+	            <img class="imgindex" alt="temperatura.jpg" src="/img/nav/temperatura.jpg">
+	            <div class="texto">
+	            	<h5 class="titulo" th:text="#{navbar.sgc.temperature}"></h5>
+	            </div>
+	        </div>
+	        <div class="col-xs-3 col-sm-2 container-img">
+	            <img class="imgindex" alt="residuos.jpg" src="/img/nav/residuos.jpg">
+	            <div class="texto">
+	            	<h5 class="titulo" th:text="#{navbar.sgc.waste}"></h5>
+	            </div>
+	        </div>
+	        <div class="col-xs-3 col-sm-2 container-img">
+	            <img class="imgindex" alt="limpiezayde.jpg" src="/img/nav/limpiezayde.jpg">
+	            <div class="texto">
+	            	<h5 class="titulo" th:text="#{navbar.sgc.cleaning}"></h5>
+	            </div>
+	        </div>
+	        <div class="col-xs-3 col-sm-2 container-img" sec:authorize="hasRole('ROLE_ADMIN')">
+	            <img class="imgindex" alt="cargarinventario.jpg" src="/img/nav/cargarinventario.jpg">
+	            <div class="texto">
+	            	<h5 class="titulo" th:text="#{navbar.configuration.load.inventory}"></h5>
+	            </div>
+	        </div>
+	        <div class="col-xs-3 col-sm-2 container-img">
+	            <img class="imgindex" alt="recargas.jpg" src="/img/nav/recargas.jpg">
+	            <div class="texto">
+	            	<h5 class="titulo" th:text="#{navbar.provider.rechargue}"></h5>
+	            </div>
+	        </div>
+	        <div class="col-xs-3 col-sm-2 container-img" sec:authorize="hasRole('ROLE_ADMIN')">
+	            <img class="imgindex" alt="droxid.png" src="/img/nav/droxid.png">
+	            <div class="texto">
+	            	<h5 class="titulo" th:text="#{navbar.provider.droxi}"></h5>
+	            </div>
+	        </div>
+	      	<div class="col-xs-3 col-sm-2 container-img" sec:authorize="hasRole('ROLE_ADMIN')">
+	            <img class="imgindex" alt="logoroma.png" src="/img/nav/logoroma.png">
+	            <div class="texto">
+	            	<h5 class="titulo" th:text="#{navbar.provider.roma}"></h5>
+	            </div>
+	        </div>
+	    </div>
 	</div>
-	<div th:if="${editMode}" th:include="user-form/change-password.html"></div>
-	<div th:include="user-form/confirm-delete-dialog.html" th:remove="tag"></div>
+	<footer th:insert="fragments.html::footer"></footer>
 </body>
 </html>

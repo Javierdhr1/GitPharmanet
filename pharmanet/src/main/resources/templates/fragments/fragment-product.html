@@ -1,0 +1,49 @@
+  
+<div class="table-responsive">
+	<table id="userList"
+		class="table table-bordered table-hover table-striped">
+		<thead class="thead-light">
+			<tr>
+				<th scope="col" th:text="#{table.product.cod}"></th>
+				<th scope="col" th:text="#{table.product.chilcode}"></th>
+				<th scope="col" th:text="#{table.product.name}"></th>
+				<th scope="col" th:text="#{table.product.price.blizter}"></th>
+				<th scope="col" th:text="#{table.product.price.retail}"></th>
+				<th scope="col" th:text="#{table.product.price.global}"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="product: ${productList}">
+				<td th:text="${product.codebar}" />
+				<td th:text="${product.childBarcode}" />
+				<td th:text="${product.nameProduct}" />
+				<td th:text="${product.saleBlizter}" />
+				<td th:text="${product.saleRetail}" />
+				<td th:text="${product.saleGlobal}" />
+				<td>
+<!-- 					<span th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')} or (${#authorization.expression('hasRole(''ROLE_USER'')')} and ${#httpServletRequest.remoteUser==user.userName})"> -->
+<!-- 					    <a href="#" th:href="@{'/editUser/'+ ${user.id}}"><i class="fas fa-edit"></i></a> -->
+<!-- 					</span> -->
+<!-- 					<span th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" > -->
+<!-- 						| <a href="#" th:onclick="'javascript:confirmDelete(\''+ ${user.id} +'\');'"><i class="fas fa-user-times"></i></a> -->
+<!-- 					</span> -->
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="alert-danger text-center" th:if="${listErrorMessage}"
+		th:text="${listErrorMessage}">Error Message</div>
+</div>
+
+<script type="text/javascript">
+
+	function confirmDelete(id) {
+		$('#deleteModal').modal('show');
+		$("#userIdHiddenInput").val(id);
+	}
+
+	function deleteUser() {
+		var id = $("#userIdHiddenInput").val();
+		window.location = "deleteUser/" + id;
+	}
+</script>

@@ -7,7 +7,9 @@ import javax.security.auth.login.AccountException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -24,8 +26,10 @@ import com.drogueria.pharmanet.dto.ChangePasswordForm;
 import com.drogueria.pharmanet.entity.User;
 import com.drogueria.pharmanet.exception.CustomFieldValidationException;
 import com.drogueria.pharmanet.exception.UserNameOrIdNotExist;
+import com.drogueria.pharmanet.repository.ProductRepository;
 import com.drogueria.pharmanet.repository.RoleRepository;
 import com.drogueria.pharmanet.repository.UserRepository;
+import com.drogueria.pharmanet.service.ProductService;
 import com.drogueria.pharmanet.service.UserService;
 
 @Controller
@@ -37,12 +41,21 @@ public class UserController {
 	@Autowired
 	RoleRepository roleRepository;
 	
+	@Autowired
+	ProductService productService;
+	
+	@Value("${pharmanet.hola}")
+	String prueba;
+	
 	@GetMapping({"/","/login"})
 	public String index() {
+		System.out.println("propiedad:" + prueba);
 		return "index";
 	}
 	
+	
 	@GetMapping("/userForm")
+//	@PreAuthorize("hasRole('ADMIN')")
 	public String userForm(Model model) {
 		model.addAttribute("userForm", new User());
 		model.addAttribute("userList", userService.getAllUsers());
@@ -81,6 +94,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/editUser/{id}")
+//	@PreAuthorize("hasRole('ADMIN')")
 	public String getEditUserForm(Model model, @PathVariable(name = "id") Long id) throws Exception{
 		User userToEdit = userService.getUserById(id);
 		
@@ -154,6 +168,12 @@ public class UserController {
 		}
 		
 		return ResponseEntity.ok("success");
+	}
+	
+	@GetMapping("/sellForm")
+	public String sellForm(Model model) {
+		model.addAttribute("productList", productService.findAll());		
+		return "user-form/seller-view";
 	}
 	
 }

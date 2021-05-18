@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:fragment="headerfiles">
+    <title>Productos</title>
+  
+	<!-- FRAMEWORK BOOTSTRAP para el estilo de la pagina-->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	
+	<!-- JQUERY -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	
+	<!-- Los iconos tipo Solid de Fontawesome-->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
+	<script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+	
+	<!-- Nuestro css-->
+	<link rel="stylesheet" type="text/css" href="static/css/user-form.css" th:href="@{/css/user-form.css}">
+	<link rel="stylesheet" type="text/css" href="static/css/seller-view.css" th:href="@{/css/seller-view.css}">
+
+	<!-- DATA TABLE -->
+	<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		//Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
+		$('#userList').DataTable({
+			
+			"language":{
+				"processing": "Procesando...",
+			    "lengthMenu": "Mostrar _MENU_ registros",
+			    "zeroRecords": "No se encontraron resultados",
+			    "emptyTable": "Ningun dato disponible en esta tabla",
+			    "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+			    "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+			    "search": "Buscar:",
+			    "infoThousands": ",",
+			    "loadingRecords": "Cargando...",
+			    "paginate": {
+			        "first": "Primero",
+			        "last": "Último",
+			        "next": "Siguiente",
+			        "previous": "Anterior"
+				}
+			}
+			
+		});
+	});
+</script>
+
+</head>
+<body>
+<div th:fragment="nav">
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#"><img src="/img/IconoPharmanet.jpg" alt="Icono" /></a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a th:href="@{/userForm}">Inicio</a></li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#" th:text="#{navbar.seller}"></a>
+          <ul class="dropdown-menu">
+            <li><a href="#" th:text="#{navbar.seller.sales}"></a></li>
+            <li><a href="#" th:text="#{navbar.seller.quotation}"></a></li>
+            <li><a href="#" th:text="#{navbar.seller.closesale}"></a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#" th:text="#{navbar.reports}"></a>
+          <ul class="dropdown-menu">
+            <li><a href="#" th:text="#{navbar.reports.analysis}"></a></li>
+            <li><a href="#" th:text="#{navbar.reports.inventory}"></a></li>
+            <li><a href="#" th:text="#{navbar.reports.closing.search}"></a></li>
+          </ul>
+        </li>
+        <li class="dropdown" sec:authorize="hasRole('ROLE_ADMIN')">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#" th:text="#{navbar.administration}"></a>
+          <ul class="dropdown-menu">
+            <li><a href="#" th:text="#{navbar.administration.return.sale}"></a></li>
+            <li><a href="#" th:text="#{navbar.administration.expiration}"></a></li>
+            <li><a href="#" th:text="#{navbar.administration.accounts.receivable}"></a></li>
+            <li><a href="#" th:text="#{navbar.administration.debtstopay}"></a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#" th:text="#{navbar.sgc}"></a>
+          <ul class="dropdown-menu">
+            <li><a href="#" th:text="#{navbar.sgc.temperature}"></a></li>
+            <li><a href="#" th:text="#{navbar.sgc.waste}"></a></li>
+            <li><a href="#" th:text="#{navbar.sgc.cleaning}"></a></li>
+            <li><a href="#" th:text="#{navbar.sgc.control}"></a></li>
+          </ul>
+        </li>
+        <li class="dropdown" sec:authorize="hasRole('ROLE_ADMIN')">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#" th:text="#{navbar.configuration}"></a>
+          <ul class="dropdown-menu">
+            <li><a href="#" th:text="#{navbar.configuration.articles}"></a></li>
+            <li><a href="#" th:text="#{navbar.configuration.customers}"></a></li>
+            <li><a href="#" th:text="#{navbar.configuration.users}"></a></li>
+            <li><a href="#" th:text="#{navbar.configuration.load.inventory}"></a></li>
+            <li><a href="#" th:text="#{navbar.configuration.initial.inventory}"></a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+        <a class="nav-link" href="#" th:href="@{/logout}"><span th:text="${#authentication.getPrincipal().getUsername()}"></span> - <span>logout &nbsp</span><span class="float-right"><i class="fas fa-sign-out-alt"></i></span></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+</div>
+<div class="container"></div>
+<footer th:fragment="footer" class="dark bg-dark fixed-bottom text-center p-3">
+    <div class="container">
+        <span class="text-muted">Footer de la página &copy; yo mismo</span>
+    </div>
+</footer>
+<!--JQUERY-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</body>
+</html>
